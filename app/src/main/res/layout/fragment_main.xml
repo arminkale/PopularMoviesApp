@@ -10,12 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/grid_view_main"
-        android:columnWidth="150dp"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
         android:verticalSpacing="0dp"
-        android:horizontalSpacing="0dp"
-        android:gravity="fill"/>
+        android:horizontalSpacing="0dp"/>
 
 </FrameLayout>
 
