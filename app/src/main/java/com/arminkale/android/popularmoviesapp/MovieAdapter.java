@@ -60,11 +60,7 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
         }
 
         ImageView imageView = (ImageView) convertView.findViewById(R.id.image_view_main);
-
-        Log.d(LOG_TAG, "Poster path: " + movie.getPosterPath());
         Picasso.with(getContext()).load(movie.getPosterPath()).into(imageView);
-        //imageView.setMinimumHeight(256);
-
         return convertView;
     }
 }

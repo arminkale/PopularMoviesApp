@@ -56,9 +56,7 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Movie movie = mMovieAdapter.getItem(position);
-                Log.d(LOG_TAG, "Movie ID: " + movie.Id);
                 // Executed in an Activity, so 'this' is the Context
-                // The fileUrl is a string URL, such as "http://www.example.com/image.png"
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class)
                         .putExtra(Intent.EXTRA_INTENT, movie);
                 startActivity(detailIntent);
@@ -70,9 +68,6 @@ public class MainActivityFragment extends Fragment {
 
     private void UpdateMovies() {
         FetchMovieTask movieTask = new FetchMovieTask();
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        //String location = prefs.getString(getString(R.string.pref_location_key),
-        //        getString(R.string.pref_location_default));
         movieTask.execute();
     }
 
@@ -93,7 +88,7 @@ public class MainActivityFragment extends Fragment {
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
          */
-        private List<Movie> getMovieDataFromJson(String movieJsonStr)//, int numDays)
+        private List<Movie> getMovieDataFromJson(String movieJsonStr)
                 throws JSONException {
             // These are the names of the JSON objects that need to be extracted.
             final String JSON_RESULTS = "results";
@@ -107,7 +102,6 @@ public class MainActivityFragment extends Fragment {
 
             JSONObject movieJson = new JSONObject(movieJsonStr);
             JSONArray movieArray = movieJson.getJSONArray(JSON_RESULTS);
-            Log.d(LOG_TAG, "movieArray: " + movieArray.toString());
 
             // TMDB currently returns 20 movies based upon the the popularity or user rating that
             // is being asked for. The returned data is also sorted.
@@ -125,11 +119,8 @@ public class MainActivityFragment extends Fragment {
 
                 // Get the JSON object representing the day
                 JSONObject json_movie = movieArray.getJSONObject(i);
-                Log.d(LOG_TAG, "json_movie: " + json_movie.toString());
 
-                // Temperatures are in a child object called "temp".  Try not to name variables
-                // "temp" when working with temperature.  It confuses everybody.
-                //JSONObject idObject = json_movie.getJSONObject(JSON_ORIGINAL_TITLE);
+                // Get the child objects representing the movie.
                 id = json_movie.getInt(JSON_ID);
                 originalTitle = json_movie.getString(JSON_ORIGINAL_TITLE);
                 synopsis = json_movie.getString(JSON_SYNOPSIS);
@@ -147,33 +138,14 @@ public class MainActivityFragment extends Fragment {
                         popularity,
                         userRating);
 
-                Log.d(LOG_TAG, "i: " + i);
-                Log.d(LOG_TAG, "id: " + movie.Id);
-                Log.d(LOG_TAG, "title: " + movie.OriginalTitle);
-                Log.d(LOG_TAG, "synopsis: " + movie.Synopsis);
-                Log.d(LOG_TAG, "release date: " + movie.ReleaseDate.toString());
-                Log.d(LOG_TAG, "poster path: " + movie.getPosterPath());
-                Log.d(LOG_TAG, "popularity: " + movie.Popularity);
-                Log.d(LOG_TAG, "user rating: " + movie.UserRating);
-
                 movieResults.add(movie);
             }
-
-//            for (String s : resultStrs) {
-//                Log.v(LOG_TAG, "Forecast entry: " + s);
-//            }
-
 
             return movieResults;
         }
 
         @Override
         protected List<Movie> doInBackground(String... params) {
-
-//            // If there's no zip code, there's nothing to look up.  Verify size of params.
-//            if (params.length == 0) {
-//                return null;
-//            }
 
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
@@ -209,7 +181,6 @@ public class MainActivityFragment extends Fragment {
                         .build();
 
                 URL url = new URL(builtUri.toString());
-                Log.v(LOG_TAG, "Built URI " + builtUri.toString());
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -223,9 +194,8 @@ public class MainActivityFragment extends Fragment {
                     Log.d(LOG_TAG, "Input stream is empty!");
                     // Nothing to do.
                     return null;
-                } else {
-                    Log.d(LOG_TAG, "Input stream is NOT empty!");
                 }
+
                 reader = new BufferedReader(new InputStreamReader(inputStream));
 
                 String line;
@@ -234,19 +204,16 @@ public class MainActivityFragment extends Fragment {
                     // But it does make debugging a *lot* easier if you print out the completed
                     // buffer for debugging.
                     buffer.append(line + "\n");
-                    Log.d(LOG_TAG, line);
                 }
 
                 if (buffer.length() == 0) {
                     Log.d(LOG_TAG, "Returned buffer is empty!");
                     // Stream was empty.  No point in parsing.
                     return null;
-                } else {
-                    Log.d(LOG_TAG, "Returned buffer is NOT empty!");
                 }
+
                 responseJsonString = buffer.toString();
 
-                //Log.v(LOG_TAG, "Forecast JSON String: " + responseJsonString);
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in
