@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="0dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:id="@+id/image_view_main" />
-    <!--android:minHeight="256dp" Works great on 1 Nexus 5 when this line is included -->
+
 </FrameLayout>

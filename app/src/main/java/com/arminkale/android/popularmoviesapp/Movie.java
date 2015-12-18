@@ -20,7 +20,7 @@ public class Movie implements Serializable {
     String OriginalTitle;
     String Synopsis;
     String ReleaseDate;
-    private String BasePath = "http://image.tmdb.org/t/p/w342/";
+    private String BasePath = "http://image.tmdb.org/t/p/w500/";
     private String PosterPath;
     Double Popularity;
     Double UserRating;
